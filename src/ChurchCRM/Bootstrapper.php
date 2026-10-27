@@ -9,6 +9,7 @@ use ChurchCRM\dto\SystemURLs;
 use ChurchCRM\model\ChurchCRM\ConfigQuery;
 use ChurchCRM\model\ChurchCRM\Version;
 use Ramsey\Uuid\Uuid;
+use ChurchCRM\Service\PledgePersonSchema;
 use ChurchCRM\Service\UpgradeService;
 use ChurchCRM\Utils\InputUtils;
 use ChurchCRM\Utils\LoggerUtils;
@@ -165,6 +166,12 @@ class Bootstrapper
                     RedirectUtils::redirect('external/system/db-upgrade');
                 }
             }
+        }
+
+        try {
+            PledgePersonSchema::ensure();
+        } catch (\Exception $e) {
+            self::$bootStrapLogger->error('Could not add pledge_plg.plg_PerID: ' . $e->getMessage(), ['exception' => $e]);
         }
 
         // Auto-generate a stable anonymous installation UUID on first boot.

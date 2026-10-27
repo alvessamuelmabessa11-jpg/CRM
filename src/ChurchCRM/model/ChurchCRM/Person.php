@@ -744,6 +744,9 @@ class Person extends BasePerson implements PhotoInterface
 
         NoteQuery::create()->filterByPerson($this)->delete($con);
 
+        // Their gifts stay with their family, or become anonymous when they had none.
+        PledgeQuery::create()->filterByPerId($this->getId())->update(['PerId' => null], $con);
+
         return parent::preDelete($con);
     }
 
