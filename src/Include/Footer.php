@@ -1,6 +1,7 @@
 <?php
 
 use ChurchCRM\Authentication\AuthenticationManager;
+use ChurchCRM\dto\ChurchMetaData;
 use ChurchCRM\dto\SystemURLs;
 use ChurchCRM\Plugin\PluginManager;
 use ChurchCRM\Service\SystemService;
@@ -11,36 +12,17 @@ $isAdmin = AuthenticationManager::getCurrentUser()->isAdmin();
       </div><!-- /.container-xl -->
     </div><!-- /.page-body -->
 
-    <footer class="footer footer-transparent d-print-none">
+    <footer class="footer footer-transparent d-print-none gel-footer">
       <div class="container-xl">
-        <div class="row text-center align-items-center flex-row-reverse">
-          <div class="col-lg-auto ms-lg-auto">
-            <b><?= gettext('Version') ?></b> <?= $_SESSION['sSoftwareInstalledVersion'] ?>
-            &nbsp;&nbsp;
-            <a href="https://www.facebook.com/getChurchCRM" target="_blank" rel="noopener noreferrer" title="Facebook">
-              <i class="fa-brands fa-facebook"></i>
-            </a>
-            &nbsp;
-            <a href="https://www.instagram.com/getchurchcrm/" target="_blank" rel="noopener noreferrer" title="Instagram">
-              <i class="fa-brands fa-instagram"></i>
-            </a>
-            &nbsp;
-            <a href="https://x.com/getChurchCRM" target="_blank" rel="noopener noreferrer" title="X">
-              <i class="fa-brands fa-x-twitter"></i>
-            </a>
-            &nbsp;
-            <a href="https://www.linkedin.com/company/getchurchcrm/" target="_blank" rel="noopener noreferrer" title="LinkedIn">
-              <i class="fa-brands fa-linkedin"></i>
-            </a>
-            &nbsp;
-            <a href="https://www.youtube.com/@getChurchCRM" target="_blank" rel="noopener noreferrer" title="YouTube">
-              <i class="fa-brands fa-youtube"></i>
-            </a>
+        <div class="d-flex flex-column flex-md-row gap-2 justify-content-between align-items-center">
+          <div>
+            &copy; <?= SystemService::getCopyrightDate() ?>
+            <?= InputUtils::escapeHTML(ChurchMetaData::getChurchName() ?: 'ChurchCRM') ?>
           </div>
-          <div class="col-12 col-lg-auto mt-3 mt-lg-0">
-            <?= gettext('Copyright') ?> &copy; <?= SystemService::getCopyrightDate() ?>
-            <a href="<?= InputUtils::escapeAttribute(SystemURLs::attributed('https://churchcrm.io', 'footer')) ?>" target="_blank" rel="noopener noreferrer">Church<b>CRM</b></a>.
-            <?= gettext('All rights reserved') ?>.
+          <div>
+            <?= gettext('Powered by') ?>
+            <a href="<?= InputUtils::escapeAttribute(SystemURLs::attributed('https://churchcrm.io', 'footer')) ?>" target="_blank" rel="noopener noreferrer">ChurchCRM</a>
+            <span class="ms-1"><?= InputUtils::escapeHTML((string) ($_SESSION['sSoftwareInstalledVersion'] ?? '')) ?></span>
           </div>
         </div>
       </div>

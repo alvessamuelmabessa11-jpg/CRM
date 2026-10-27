@@ -84,6 +84,9 @@ const removedMarkup = [
     { re: /\bdata-(?:toggle|dismiss|placement|parent|ride|slide|spy|trigger|backdrop|keyboard)\s*=/, what: 'Bootstrap 4 data attribute (use `data-bs-*`)' },
     { re: /(?<![\w-])table-(?:primary|secondary|success|danger|warning|info|light|dark)(?![\w-])/, what: 'fixed-colour table variant (black text in dark mode); use `table-active` or a `bg-*-lt` utility' },
 ];
+// The church brand theme is the one file that maps the palette and typeface onto Tabler's tokens.
+const BRAND_THEME = 'src/skin/scss/_brand-theme.scss';
+const brandOnlyPatterns = new Set(['Tabler palette/font variable redefined (use data-bs-theme-primary for the accent)']);
 const focusShadow = /\$[a-z-]*focus-box-shadow\b/;
 
 const inline = {};
@@ -110,6 +113,7 @@ for (const file of files) {
     if (STYLES.test(file)) {
         const stripped = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
         for (const { re, what } of stylePatterns) {
+            if (rel === BRAND_THEME && brandOnlyPatterns.has(what)) continue;
             if (re.test(stripped)) problems.push(`${rel} ${what}`);
         }
         if (focusShadow.test(stripped)) problems.push(`${rel} deprecated Tabler Sass variable (*-focus-box-shadow)`);

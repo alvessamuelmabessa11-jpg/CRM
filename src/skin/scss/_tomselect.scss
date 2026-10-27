@@ -14,7 +14,7 @@
 
   &.focus .ts-control {
     border-color: var(--tblr-primary);
-    box-shadow: 0 0 0 0.2rem rgba(32, 107, 196, 0.15);
+    box-shadow: 0 0 0 3px rgba(var(--tblr-primary-rgb), 0.15);
   }
 }
 

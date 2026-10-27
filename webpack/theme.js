@@ -48,6 +48,14 @@
     },
   };
 
+  try {
+    if (window.localStorage.getItem("crm.sidebar.collapsed") === "1") {
+      root.classList.add("sidebar-collapsed");
+    }
+  } catch {
+    // Storage blocked: the sidebar starts expanded.
+  }
+
   const mode = root.getAttribute("data-theme-mode");
   if (mode) {
     window.CRM.theme.setMode(mode);

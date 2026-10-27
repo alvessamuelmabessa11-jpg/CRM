@@ -32,10 +32,10 @@ describe("Auth Page CSS Regression", () => {
             cy.get(".login-card").should("be.visible");
         });
 
-        it("Should render sign-in button with auth-specific gradient styling", () => {
+        it("Should render sign-in button in the brand navy", () => {
             cy.get(".btn-sign-in").should("be.visible")
-                .invoke("css", "background-image")
-                .should("include", "gradient");
+                .invoke("css", "background-color")
+                .should("equal", "rgb(20, 33, 61)");
         });
 
         it("Should render form inputs inside login form", () => {
@@ -115,10 +115,10 @@ describe("Auth Page CSS Regression", () => {
             cy.get("input[name='username']").should("be.visible");
         });
 
-        it("Should render reset button with auth-specific gradient styling", () => {
+        it("Should render reset button in the brand navy", () => {
             cy.get(".btn-reset").should("be.visible")
-                .invoke("css", "background-image")
-                .should("include", "gradient");
+                .invoke("css", "background-color")
+                .should("equal", "rgb(20, 33, 61)");
         });
     });
 

@@ -1,6 +1,8 @@
 <?php
 
 use ChurchCRM\dto\SystemURLs;
+use ChurchCRM\Utils\DateTimeUtils;
+use ChurchCRM\Utils\InputUtils;
 
 require SystemURLs::getDocumentRoot() . '/Include/Header.php';
 
@@ -19,130 +21,188 @@ require SystemURLs::getDocumentRoot() . '/Include/Header.php';
 </div>
 <?php } ?>
 
-<!-- Stat Cards Row -->
-<div class="row row-cards mb-3 g-2">
-    <div class="col-6 col-md-4 col-lg">
-        <a href="<?= $sRootPath ?>/people/family" class="card card-sm text-decoration-none">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <span class="bg-secondary text-white avatar rounded-circle">
-                            <i class="fa-solid fa-people-roof icon"></i>
-                        </span>
-                    </div>
-                    <div class="col">
-                        <div class="fw-medium text-body" id="familyCountDashboard"><?= $dashboardCounts["families"] ?></div>
-                        <div class="text-body-secondary"><?= gettext('Families') ?></div>
-                    </div>
+<?php
+$statCard = function (string $id, string $label, int $value, string $icon, string $tone, string $url, string $meta = ''): void {
+    ?>
+    <a href="<?= $url ?>" class="card card-sm gel-stat h-100 text-decoration-none">
+        <div class="card-body">
+            <div class="d-flex align-items-start justify-content-between gap-2">
+                <div class="min-w-0">
+                    <div class="gel-stat-label"><?= InputUtils::escapeHTML($label) ?></div>
+                    <div class="gel-stat-value" id="<?= $id ?>"><?= $value ?></div>
+                    <?php if ($meta !== ''): ?><div class="gel-stat-meta"><?= $meta ?></div><?php endif; ?>
                 </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg">
-        <a href="<?= $sRootPath ?>/people/list" class="card card-sm text-decoration-none">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <span class="bg-success text-white avatar rounded-circle">
-                            <i class="fa-solid fa-people-group icon"></i>
-                        </span>
-                    </div>
-                    <div class="col">
-                        <div class="fw-medium text-body" id="peopleStatsDashboard"><?= $dashboardCounts["People"] ?></div>
-                        <div class="text-body-secondary"><?= gettext('People') ?></div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg">
-        <a href="<?= $sRootPath ?>/groups/dashboard" class="card card-sm text-decoration-none">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <span class="bg-primary text-white avatar rounded-circle">
-                            <i class="fa-solid fa-users icon"></i>
-                        </span>
-                    </div>
-                    <div class="col">
-                        <div class="fw-medium text-body" id="groupsCountDashboard"><?= $dashboardCounts["Groups"] ?></div>
-                        <div class="text-body-secondary"><?= gettext('Groups') ?></div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg">
-        <?php if ($sundaySchoolEnabled): ?>
-        <a href="<?= $sRootPath ?>/groups/sundayschool" class="card card-sm text-decoration-none">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <span class="bg-warning text-white avatar rounded-circle">
-                            <i class="fa-solid fa-child icon"></i>
-                        </span>
-                    </div>
-                    <div class="col">
-                        <div class="fw-medium text-body" id="groupStatsSundaySchool"><?= $dashboardCounts["SundaySchool"] ?></div>
-                        <div class="text-body-secondary"><?= gettext('Sunday School') ?></div>
-                    </div>
-                </div>
-            </div>
-        </a>
-        <?php else: ?>
-        <div class="card card-sm opacity-50">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <span class="bg-warning text-white avatar rounded-circle">
-                            <i class="fa-solid fa-child icon"></i>
-                        </span>
-                    </div>
-                    <div class="col">
-                        <div class="fw-medium text-body-secondary"><?= gettext('No Sunday School') ?></div>
-                        <div class="text-body-secondary small"><?= gettext('Disabled in settings') ?></div>
-                    </div>
-                </div>
+                <span class="gel-stat-icon gel-tone-<?= $tone ?>" aria-hidden="true"><i class="<?= $icon ?>"></i></span>
             </div>
         </div>
+    </a>
+    <?php
+};
+$statDisabled = function (string $label, string $icon, string $tone): void {
+    ?>
+    <div class="card card-sm gel-stat h-100 gel-stat-disabled">
+        <div class="card-body">
+            <div class="d-flex align-items-start justify-content-between gap-2">
+                <div>
+                    <div class="gel-stat-label"><?= InputUtils::escapeHTML($label) ?></div>
+                    <div class="gel-stat-meta"><?= gettext('Disabled in settings') ?></div>
+                </div>
+                <span class="gel-stat-icon gel-tone-<?= $tone ?>" aria-hidden="true"><i class="<?= $icon ?>"></i></span>
+            </div>
+        </div>
+    </div>
+    <?php
+};
+$newPeopleDelta = $newPeople['current'] - $newPeople['previous'];
+$newPeopleTrend = $newPeopleDelta > 0 ? 'up' : ($newPeopleDelta < 0 ? 'down' : 'flat');
+$newPeopleMeta = '<span class="gel-trend gel-trend-' . $newPeopleTrend . '" title="'
+    . InputUtils::escapeAttribute(sprintf(gettext('%d in the previous 30 days'), $newPeople['previous'])) . '">'
+    . ($newPeopleTrend === 'flat' ? '' : '<i class="fa-solid fa-arrow-' . $newPeopleTrend . '" aria-hidden="true"></i> ')
+    . InputUtils::escapeHTML(sprintf(gettext('%d new in 30 days'), $newPeople['current'])) . '</span>';
+?>
+
+<!-- Stat Cards Row -->
+<div class="row row-cards mb-3 g-3">
+    <div class="col-6 col-md-4 col-xl">
+        <?php $statCard('familyCountDashboard', gettext('Families'), (int) $dashboardCounts['families'], 'fa-solid fa-people-roof', 'navy', $sRootPath . '/people/family'); ?>
+    </div>
+    <div class="col-6 col-md-4 col-xl">
+        <?php $statCard('peopleStatsDashboard', gettext('People'), (int) $dashboardCounts['People'], 'fa-solid fa-people-group', 'gold', $sRootPath . '/people/list', $newPeopleMeta); ?>
+    </div>
+    <div class="col-6 col-md-4 col-xl">
+        <?php $statCard('groupsCountDashboard', gettext('Groups'), (int) $dashboardCounts['Groups'], 'fa-solid fa-users', 'navy', $sRootPath . '/groups/dashboard'); ?>
+    </div>
+    <div class="col-6 col-md-4 col-xl">
+        <?php if ($sundaySchoolEnabled): ?>
+            <?php $statCard('groupStatsSundaySchool', gettext('Sunday School'), (int) $dashboardCounts['SundaySchool'], 'fa-solid fa-child', 'success', $sRootPath . '/groups/sundayschool'); ?>
+        <?php else: ?>
+            <?php $statDisabled(gettext('No Sunday School'), 'fa-solid fa-child', 'success'); ?>
         <?php endif; ?>
     </div>
-    <div class="col-6 col-md-4 col-lg">
+    <div class="col-12 col-md-4 col-xl">
         <?php if ($eventsEnabled): ?>
-        <a href="<?= $sRootPath ?>/event/dashboard" class="card card-sm text-decoration-none">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <span class="bg-info text-white avatar rounded-circle">
-                            <i class="fa-regular fa-calendar-check icon"></i>
-                        </span>
-                    </div>
-                    <div class="col">
-                        <div class="fw-medium text-body"><?= $dashboardCounts["events"] ?></div>
-                        <div class="text-body-secondary"><?= gettext('Check-ins') ?></div>
-                    </div>
-                </div>
-            </div>
-        </a>
+            <?php $statCard('checkinsCountDashboard', gettext('Check-ins'), (int) $dashboardCounts['events'], 'fa-regular fa-calendar-check', 'info', $sRootPath . '/event/dashboard', InputUtils::escapeHTML(gettext('Checked in now'))); ?>
         <?php else: ?>
-        <div class="card card-sm opacity-50">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <span class="bg-info text-white avatar rounded-circle">
-                            <i class="fa-regular fa-calendar-check icon"></i>
-                        </span>
-                    </div>
-                    <div class="col">
-                        <div class="fw-medium text-body-secondary"><?= gettext('No Check-ins') ?></div>
-                        <div class="text-body-secondary small"><?= gettext('Disabled in settings') ?></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <?php $statDisabled(gettext('No Check-ins'), 'fa-regular fa-calendar-check', 'info'); ?>
         <?php endif; ?>
     </div>
 </div>
+
+<?php
+$dataChecks = array_filter([
+    ['count' => $genderDataCheckCount, 'label' => gettext('%d missing gender'), 'url' => '/people/list?Gender=0'],
+    ['count' => $roleDataCheckCount, 'label' => gettext('%d missing role'), 'url' => '/people/list?FamilyRole=0'],
+    ['count' => $classificationDataCheckCount, 'label' => gettext('%d missing classification'), 'url' => '/people/list?Classification=0'],
+], fn (array $check): bool => $check['count'] > 0);
+?>
+
+<div class="row row-cards mb-3 g-3">
+    <div class="<?= empty($quickActions) && empty($dataChecks) ? 'col-12' : 'col-lg-8' ?>">
+        <div class="card h-100" id="growthChartCard">
+            <div class="card-header">
+                <div>
+                    <h3 class="card-title"><?= gettext('Membership growth') ?></h3>
+                    <div class="card-subtitle text-body-secondary small"><?= gettext('People added each month, last 12 months') ?></div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="growthChart" class="gel-chart" role="img" aria-label="<?= InputUtils::escapeAttribute(gettext('Membership growth')) ?>"></div>
+            </div>
+        </div>
+    </div>
+    <?php if (!empty($quickActions) || !empty($dataChecks)): ?>
+    <div class="col-lg-4">
+        <?php if (!empty($quickActions)): ?>
+        <div class="card mb-3" id="quickActionsCard">
+            <div class="card-header">
+                <h3 class="card-title"><?= gettext('Quick actions') ?></h3>
+            </div>
+            <div class="card-body">
+                <div class="gel-quick-actions">
+                    <?php foreach ($quickActions as $action): ?>
+                    <a href="<?= $sRootPath . $action['url'] ?>" class="gel-quick-action">
+                        <span class="gel-quick-action-icon" aria-hidden="true"><i class="fa-solid <?= $action['icon'] ?>"></i></span>
+                        <span><?= InputUtils::escapeHTML($action['label']) ?></span>
+                    </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
+        <?php if (!empty($dataChecks)): ?>
+        <div class="card" id="dataQualityCard">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa-solid fa-clipboard-check me-2 text-warning" aria-hidden="true"></i><?= gettext('Needs attention') ?></h3>
+            </div>
+            <div class="list-group list-group-flush">
+                <?php foreach ($dataChecks as $check): ?>
+                <a href="<?= $sRootPath . $check['url'] ?>" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+                    <span><?= InputUtils::escapeHTML(sprintf($check['label'], $check['count'])) ?></span>
+                    <i class="fa-solid fa-chevron-right text-body-secondary small" aria-hidden="true"></i>
+                </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
+</div>
+
+<?php if ($canViewEvents) { ?>
+<div class="row row-cards mb-3 g-3">
+    <div class="col-lg-8">
+        <div class="card h-100" id="attendanceChartCard">
+            <div class="card-header">
+                <div>
+                    <h3 class="card-title"><?= gettext('Attendance') ?></h3>
+                    <div class="card-subtitle text-body-secondary small"><?= gettext('Attendance records per month, by event date') ?></div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="attendanceChart" class="gel-chart" role="img" aria-label="<?= InputUtils::escapeAttribute(gettext('Attendance')) ?>"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card h-100" id="upcomingEventsCard">
+            <div class="card-header">
+                <h3 class="card-title"><?= gettext('Upcoming events') ?></h3>
+                <div class="card-actions">
+                    <a href="<?= $sRootPath ?>/event/calendars" class="btn btn-sm btn-ghost-secondary"><?= gettext('Calendar') ?></a>
+                </div>
+            </div>
+            <?php if (empty($upcomingEvents)): ?>
+            <div class="card-body">
+                <div class="empty py-3">
+                    <div class="empty-icon"><i class="fa-regular fa-calendar fa-2x text-body-secondary" aria-hidden="true"></i></div>
+                    <p class="empty-title"><?= gettext('No upcoming events') ?></p>
+                </div>
+            </div>
+            <?php else: ?>
+            <div class="list-group list-group-flush">
+                <?php
+                $monthNames = [1 => gettext('January'), gettext('February'), gettext('March'), gettext('April'), gettext('May'), gettext('June'),
+                    gettext('July'), gettext('August'), gettext('September'), gettext('October'), gettext('November'), gettext('December')];
+                foreach ($upcomingEvents as $event): ?>
+                <a href="<?= $sRootPath ?>/event/view/<?= (int) $event['id'] ?>" class="list-group-item list-group-item-action d-flex align-items-center gap-3">
+                    <span class="gel-date-chip" aria-hidden="true">
+                        <span class="gel-date-chip-month"><?= InputUtils::escapeHTML(mb_substr($monthNames[(int) $event['start']->format('n')], 0, 3)) ?></span>
+                        <span class="gel-date-chip-day"><?= $event['start']->format('j') ?></span>
+                    </span>
+                    <span class="min-w-0">
+                        <span class="d-block fw-medium text-truncate text-body"><?= InputUtils::escapeHTML($event['title']) ?></span>
+                        <span class="d-block small text-body-secondary"><?= InputUtils::escapeHTML(DateTimeUtils::formatDate($event['start'], true)) ?></span>
+                    </span>
+                </a>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+<?php } ?>
+
+<script nonce="<?= SystemURLs::getCSPNonce() ?>">window.CRM.dashboardCharts = <?= InputUtils::jsonEncodeForScript(['growth' => $growthChart, 'attendance' => $attendanceChart]) ?>;</script>
 
 <?php if ($eventsEnabled) { ?>
 <div class="row mb-3">

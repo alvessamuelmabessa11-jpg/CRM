@@ -10,6 +10,9 @@
  * automatically appear in both output bundles.
  */
 
+// Inter, bundled so the brand typeface needs no external font host
+import "@fontsource-variable/inter";
+
 // Import FontAwesome CSS - webfonts are automatically bundled by webpack
 import "@fortawesome/fontawesome-free/css/all.min.css";
 

@@ -45,6 +45,7 @@ describe("Mobile UX — Logged-Out Pages", () => {
     });
 
     it("auth footer social icons meet 44px minimum touch target", () => {
+        cy.makePrivateAdminAPICall("POST", "admin/api/system/config/sChurchFacebook", { value: "https://www.facebook.com/example" }, 200);
         cy.visit("/session/begin");
         cy.get(".auth-footer-social a").first().then(($el) => {
             const width = parseFloat($el.css("width"));
@@ -52,6 +53,7 @@ describe("Mobile UX — Logged-Out Pages", () => {
             expect(width, "social link width").to.be.gte(44);
             expect(height, "social link height").to.be.gte(44);
         });
+        cy.makePrivateAdminAPICall("POST", "admin/api/system/config/sChurchFacebook", { value: "" }, 200);
     });
 
     it("password reset page fits mobile viewport", () => {

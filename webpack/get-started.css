@@ -40,7 +40,7 @@
 .gs-card:focus {
   text-decoration: none;
   color: inherit;
-  outline: 3px solid #0d6efd;
+  outline: 3px solid var(--tblr-primary);
   outline-offset: 3px;
   transform: translateY(-3px);
   box-shadow:

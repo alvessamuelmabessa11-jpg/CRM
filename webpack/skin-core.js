@@ -53,6 +53,9 @@ import { installPageConfig } from "./crm-bootstrap";
 // Row/dropdown menus escape overflow-clipping containers
 import "./common/dropdown-overflow";
 
+// Desktop sidebar collapse toggle
+import "./sidebar-collapse";
+
 // Import issue reporter (GitHub issue modal)
 import "../src/skin/js/IssueReporter.js";
 

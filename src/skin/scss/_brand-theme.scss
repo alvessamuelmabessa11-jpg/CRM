@@ -1,0 +1,310 @@
+// Igreja Ministerial Geração Eleita design system.
+// The one place the brand palette, type and radii map onto Tabler tokens; every
+// page inherits them through Tabler's own variables. A user-chosen accent
+// (data-bs-theme-primary) still wins over the brand primary.
+
+:root {
+  --gel-navy: #14213d;
+  --gel-navy-rgb: 20, 33, 61;
+  --gel-navy-2: #1b2b4b;
+  --gel-gold: #d9a441;
+  --gel-gold-rgb: 217, 164, 65;
+  --gel-gold-text: #8a6417; // gold dark enough for text on white (AA)
+  --gel-bg: #f5f7fa;
+  --gel-surface: #ffffff;
+  --gel-text: #202939;
+  --gel-text-muted: #64748b;
+  --gel-border: #e2e8f0;
+  --gel-success: #16a085;
+  --gel-warning: #d97706;
+  --gel-error: #dc2626;
+  --gel-info: #2563eb;
+
+  --gel-radius-card: 12px;
+  --gel-radius-control: 8px;
+  --gel-shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04);
+  --gel-shadow-raised: 0 4px 16px rgba(16, 24, 40, 0.08);
+  --gel-transition: 160ms ease;
+  --gel-sidebar-bg: var(--gel-navy);
+  --gel-sidebar-hover: rgba(255, 255, 255, 0.06);
+  --gel-sidebar-text: rgba(255, 255, 255, 0.74);
+
+  --tblr-font-sans-serif: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --tblr-body-bg: var(--gel-bg);
+  --tblr-body-color: var(--gel-text);
+  --tblr-body-color-rgb: 32, 41, 57;
+  --tblr-secondary-color: var(--gel-text-muted);
+  --tblr-border-color: var(--gel-border);
+  --tblr-border-color-translucent: var(--gel-border);
+  --tblr-bg-surface: var(--gel-surface);
+  --tblr-bg-surface-secondary: #f8fafc;
+  --tblr-border-radius: var(--gel-radius-control);
+  --tblr-border-radius-lg: var(--gel-radius-card);
+  --tblr-success: var(--gel-success);
+  --tblr-success-rgb: 22, 160, 133;
+  --tblr-warning: var(--gel-warning);
+  --tblr-warning-rgb: 217, 119, 6;
+  --tblr-danger: var(--gel-error);
+  --tblr-danger-rgb: 220, 38, 38;
+  --tblr-info: var(--gel-info);
+  --tblr-info-rgb: 37, 99, 235;
+  --tblr-link-color: #1d3a75;
+  --tblr-link-color-rgb: 29, 58, 117;
+  --tblr-link-hover-color: var(--gel-navy);
+  --tblr-link-hover-color-rgb: 20, 33, 61;
+}
+
+:root:not([data-bs-theme-primary]) {
+  --tblr-primary: var(--gel-navy);
+  --tblr-primary-rgb: 20, 33, 61;
+  --tblr-primary-fg: #ffffff;
+  --tblr-primary-darken: #0d1730;
+  --tblr-primary-lt: rgba(20, 33, 61, 0.08);
+  --tblr-primary-lt-rgb: 20, 33, 61;
+  --tblr-primary-text-emphasis: var(--gel-navy);
+  --tblr-primary-bg-subtle: #e8ecf4;
+  --tblr-primary-border-subtle: #c5cee0;
+}
+
+:root[data-bs-theme="dark"] {
+  --gel-bg: #0b1324;
+  --gel-surface: #111c33;
+  --gel-text: #e2e8f0;
+  --gel-text-muted: #94a3b8;
+  --gel-border: #24324f;
+  --gel-gold-text: var(--gel-gold);
+  --gel-shadow-card: none;
+  --gel-shadow-raised: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --gel-sidebar-bg: #0a1120;
+
+  --tblr-body-bg: var(--gel-bg);
+  --tblr-body-color: var(--gel-text);
+  --tblr-body-color-rgb: 226, 232, 240;
+  --tblr-bg-surface: var(--gel-surface);
+  --tblr-bg-surface-secondary: #0e182c;
+  --tblr-bg-surface-tertiary: #16233f;
+  --tblr-bg-forms: #0e182c;
+  --tblr-link-color: #9db4e3;
+  --tblr-link-color-rgb: 157, 180, 227;
+  --tblr-link-hover-color: #c3d2f0;
+  --tblr-link-hover-color-rgb: 195, 210, 240;
+}
+
+:root[data-bs-theme="dark"]:not([data-bs-theme-primary]) {
+  --tblr-primary: #3d5f9e;
+  --tblr-primary-rgb: 61, 95, 158;
+  --tblr-primary-fg: #ffffff;
+  --tblr-primary-darken: #34528a;
+  --tblr-primary-lt: rgba(61, 95, 158, 0.22);
+  --tblr-primary-lt-rgb: 61, 95, 158;
+  --tblr-primary-text-emphasis: #b7c8ea;
+  --tblr-primary-bg-subtle: #16233f;
+  --tblr-primary-border-subtle: #2a3d64;
+}
+
+body {
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+}
+
+// Type scale
+.page-title {
+  font-size: 1.625rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  color: var(--tblr-body-color);
+}
+
+.page-pretitle {
+  color: var(--gel-gold-text);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+h1, .h1 { letter-spacing: -0.02em; }
+h2, .h2 { font-size: 1.25rem; letter-spacing: -0.01em; }
+
+.card-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: inherit;
+}
+
+// Surfaces
+.card {
+  --tblr-card-border-radius: var(--gel-radius-card);
+  --tblr-card-border-color: var(--gel-border);
+  --tblr-card-box-shadow: var(--gel-shadow-card);
+  box-shadow: var(--gel-shadow-card);
+}
+
+.card-header {
+  border-bottom-color: var(--gel-border);
+}
+
+a.card {
+  transition: border-color var(--gel-transition), box-shadow var(--gel-transition), transform var(--gel-transition);
+
+  &:hover {
+    border-color: rgba(var(--gel-gold-rgb), 0.55);
+    box-shadow: var(--gel-shadow-raised);
+  }
+}
+
+.modal-content {
+  border-radius: var(--gel-radius-card);
+  border-color: var(--gel-border);
+  box-shadow: var(--gel-shadow-raised);
+}
+
+.dropdown-menu {
+  border-radius: var(--gel-radius-control);
+  border-color: var(--gel-border);
+  box-shadow: var(--gel-shadow-raised);
+}
+
+// Controls
+.btn {
+  border-radius: var(--gel-radius-control);
+  font-weight: 550;
+  transition: background-color var(--gel-transition), border-color var(--gel-transition), color var(--gel-transition), box-shadow var(--gel-transition);
+}
+
+.form-control,
+.form-select {
+  border-radius: var(--gel-radius-control);
+  min-height: 2.5rem;
+  transition: border-color var(--gel-transition), box-shadow var(--gel-transition);
+}
+
+textarea.form-control {
+  min-height: 0;
+}
+
+.form-control-sm,
+.form-select-sm {
+  min-height: 2rem;
+}
+
+.form-label {
+  font-weight: 550;
+  color: var(--tblr-body-color);
+}
+
+.form-label.required::after,
+.form-label .required {
+  color: var(--gel-error);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: rgba(var(--tblr-primary-rgb), 0.6);
+  box-shadow: 0 0 0 3px rgba(var(--gel-gold-rgb), 0.28);
+}
+
+// Keyboard focus: a gold ring that reads on navy, white and dark surfaces alike.
+:focus-visible {
+  outline: 2px solid var(--gel-gold);
+  outline-offset: 2px;
+}
+
+.btn:focus-visible,
+.nav-link:focus-visible,
+.dropdown-item:focus-visible {
+  outline: 2px solid var(--gel-gold);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.form-control:focus-visible,
+.form-select:focus-visible,
+.form-check-input:focus-visible {
+  outline: 0;
+}
+
+// Tables
+.table {
+  --tblr-table-border-color: var(--gel-border);
+}
+
+.table thead th,
+.table > thead > tr > th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gel-text-muted);
+  background: var(--tblr-bg-surface-secondary);
+}
+
+.table-hover > tbody > tr:hover > * {
+  --tblr-table-bg-state: rgba(var(--gel-navy-rgb), 0.035);
+}
+
+:root[data-bs-theme="dark"] .table-hover > tbody > tr:hover > * {
+  --tblr-table-bg-state: rgba(255, 255, 255, 0.035);
+}
+
+// Badges and alerts stay calm: tinted surfaces, never full-bleed colour blocks.
+.badge {
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.alert {
+  border-radius: var(--gel-radius-control);
+}
+
+.breadcrumb {
+  font-size: 0.8125rem;
+
+  .breadcrumb-item a {
+    color: var(--gel-text-muted);
+
+    &:hover {
+      color: var(--tblr-body-color);
+    }
+  }
+
+  .breadcrumb-item.active {
+    color: var(--tblr-body-color);
+    font-weight: 550;
+  }
+}
+
+.nav-tabs .nav-link.active {
+  box-shadow: inset 0 -2px 0 var(--gel-gold);
+}
+
+.progress-bar {
+  background-color: var(--tblr-primary);
+}
+
+// Loading placeholder for cards that fill in after an API call
+.gel-skeleton {
+  display: block;
+  height: 0.875rem;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--gel-border) 25%, var(--tblr-bg-surface-secondary) 50%, var(--gel-border) 75%);
+  background-size: 200% 100%;
+  animation: gel-shimmer 1.2s linear infinite;
+}
+
+@keyframes gel-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+:root[data-bs-theme="dark"] .alert-primary {
+  --tblr-alert-color: var(--tblr-primary-text-emphasis);
+}

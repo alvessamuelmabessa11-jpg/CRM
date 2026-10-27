@@ -396,6 +396,7 @@ $app->group('/system', function (RouteCollectorProxy $group): void {
             'iChurchLatitude'  => ($latFloat !== 0.0 || $lngFloat !== 0.0) ? (string) $latFloat : '',
             'iChurchLongitude' => ($latFloat !== 0.0 || $lngFloat !== 0.0) ? (string) $lngFloat : '',
             'sChurchWebSite'   => SystemConfig::getValue('sChurchWebSite'),
+            'sChurchSlogan'    => SystemConfig::getValue('sChurchSlogan'),
         ];
 
         $pageArgs = [
@@ -517,6 +518,7 @@ $app->group('/system', function (RouteCollectorProxy $group): void {
                 'iChurchLatitude'  => $rawLatInput !== '' ? $rawLatInput : (string) (float) SystemConfig::getValue('iChurchLatitude'),
                 'iChurchLongitude' => $rawLngInput !== '' ? $rawLngInput : (string) (float) SystemConfig::getValue('iChurchLongitude'),
                 'sChurchWebSite'   => $body['sChurchWebSite'] ?? '',
+                'sChurchSlogan'    => $body['sChurchSlogan'] ?? '',
             ];
 
             $pageArgs = [
@@ -584,6 +586,7 @@ $app->group('/system', function (RouteCollectorProxy $group): void {
         SystemConfig::setValue('iChurchLatitude', $latitude);
         SystemConfig::setValue('iChurchLongitude', $longitude);
         SystemConfig::setValue('sChurchWebSite', $body['sChurchWebSite'] ?? '');
+        SystemConfig::setValue('sChurchSlogan', trim($body['sChurchSlogan'] ?? ''));
         foreach ($socialNetworks as $network) {
             SystemConfig::setValue($network['config'], $network['url']);
         }
@@ -613,6 +616,7 @@ $app->group('/system', function (RouteCollectorProxy $group): void {
         'sChurchPhone'   => 'text',
         'sChurchEmail'   => 'text',
         'sChurchWebSite'  => 'text',
+        'sChurchSlogan'   => 'text',
         'sChurchX'         => 'text',
         'sChurchYouTube'   => 'text',
         'sChurchFacebook'  => 'text',

@@ -33,6 +33,11 @@ class ChurchMetaData
         return self::readString('sChurchName');
     }
 
+    public static function getChurchSlogan(): string
+    {
+        return self::readString('sChurchSlogan');
+    }
+
     public static function getChurchFullAddress(): string
     {
         $address = [];

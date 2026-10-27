@@ -9,6 +9,7 @@ use ChurchCRM\model\ChurchCRM\FamilyQuery;
 use ChurchCRM\model\ChurchCRM\GroupQuery;
 use ChurchCRM\model\ChurchCRM\PersonQuery;
 use ChurchCRM\Service\ClassificationService;
+use ChurchCRM\Service\DashboardMetricsService;
 use ChurchCRM\Service\PersonService;
 use ChurchCRM\view\PageHeader;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -103,6 +104,10 @@ function viewDashboard(Request $request, Response $response, array $args): Respo
     $roleDataCheckCount = $personService->getMissingRoleDataCount();
     $classificationDataCheckCount = $personService->getMissingClassificationDataCount();
 
+    $currentUser = AuthenticationManager::getCurrentUser();
+    $eventsEnabled = SystemConfig::getBooleanValue('bEnabledEvents') && $currentUser->canViewEvents();
+    $metrics = new DashboardMetricsService();
+
     $pageArgs = [
         'sRootPath'                       => SystemURLs::getRootPath(),
         'sPageTitle'                      => gettext('Welcome to') . ' ' . ChurchMetaData::getChurchName(),
@@ -120,6 +125,19 @@ function viewDashboard(Request $request, Response $response, array $args): Respo
         'genderDataCheckCount'            => $genderDataCheckCount,
         'roleDataCheckCount'              => $roleDataCheckCount,
         'classificationDataCheckCount'    => $classificationDataCheckCount,
+        'newPeople'                       => $metrics->newPeopleLast30Days(),
+        'growthChart'                     => $metrics->newPeoplePerMonth(),
+        'attendanceChart'                 => $eventsEnabled ? $metrics->attendancePerMonth() : null,
+        'upcomingEvents'                  => $eventsEnabled ? $metrics->upcomingEvents() : [],
+        'canViewEvents'                   => $eventsEnabled,
+        'quickActions'                    => array_values(array_filter([
+            $currentUser->isAddRecordsEnabled() ? ['label' => gettext('Add Person'), 'url' => '/PersonEditor.php', 'icon' => 'fa-user-plus'] : null,
+            $currentUser->isAddRecordsEnabled() ? ['label' => gettext('Add Family'), 'url' => '/FamilyEditor.php', 'icon' => 'fa-people-roof'] : null,
+            $eventsEnabled ? ['label' => gettext('Check-in'), 'url' => '/event/checkin', 'icon' => 'fa-user-check'] : null,
+            $eventsEnabled && $currentUser->canWriteEvents() ? ['label' => gettext('Add Church Event'), 'url' => '/event/editor', 'icon' => 'fa-calendar-plus'] : null,
+            $currentUser->isFinanceEnabled() ? ['label' => gettext('Add Payment'), 'url' => '/finance/pledge/new', 'icon' => 'fa-hand-holding-dollar'] : null,
+            $currentUser->isEmailEnabled() ? ['label' => gettext('Email'), 'url' => '/people/email', 'icon' => 'fa-envelope'] : null,
+        ])),
     ];
 
     return $renderer->render($response, 'dashboard.php', $pageArgs);

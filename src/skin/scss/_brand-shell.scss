@@ -1,0 +1,469 @@
+// Application shell: navy sidebar, top bar, page header and footer.
+
+// ---- Sidebar ---------------------------------------------------------------
+:root {
+  --tblr-sidebar-width: 16.5rem;
+}
+
+.gel-sidebar.navbar-vertical {
+  --tblr-navbar-bg: var(--gel-sidebar-bg);
+  --tblr-navbar-border-color: transparent;
+  --tblr-navbar-color: var(--gel-sidebar-text);
+  --tblr-navbar-active-color: #ffffff;
+  --tblr-navbar-active-bg: rgba(var(--gel-gold-rgb), 0.14);
+  --tblr-nav-link-color: var(--gel-sidebar-text);
+  --tblr-nav-link-hover-color: #ffffff;
+  --tblr-nav-link-icon-color: rgba(255, 255, 255, 0.6);
+  --tblr-hover-bg: var(--gel-sidebar-hover);
+  background: var(--gel-sidebar-bg);
+  color: var(--gel-sidebar-text);
+
+  .navbar-nav .nav-link {
+    min-height: 2.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--gel-sidebar-text);
+    transition: color var(--gel-transition);
+  }
+
+  .nav-link-icon {
+    width: 1.5rem;
+    color: rgba(255, 255, 255, 0.6);
+    transition: color var(--gel-transition);
+  }
+
+  .nav-row {
+    position: relative;
+    margin-block: 1px;
+    transition: background-color var(--gel-transition);
+
+    &:hover .nav-link,
+    &:hover .nav-link-icon {
+      color: #ffffff;
+    }
+  }
+
+  // Gold indicator on the current page and its open folder
+  .nav-item.active > .nav-row {
+    background: var(--tblr-navbar-active-bg);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset-block: 0.5rem;
+      inset-inline-start: -0.5rem;
+      width: 3px;
+      border-radius: 0 3px 3px 0;
+      background: var(--gel-gold);
+    }
+
+    .nav-link,
+    .nav-link-icon {
+      color: #ffffff;
+    }
+
+    .nav-link-icon {
+      color: var(--gel-gold);
+    }
+  }
+
+  .nav-link[aria-expanded="true"] .nav-link-icon {
+    color: var(--gel-gold);
+  }
+
+  .navbar-nav .navbar-nav {
+    border-inline-start: 1px solid rgba(255, 255, 255, 0.08);
+    margin-inline-start: 1.25rem;
+    padding-inline-start: 0.25rem !important; // beats the .ps-3 utility in MenuRenderer
+
+    .nav-link {
+      min-height: 2.125rem;
+      font-size: 0.8125rem;
+    }
+  }
+
+  .nav-link-arrow {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.gel-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  padding-block: 0.5rem;
+  color: #ffffff;
+  text-decoration: none;
+
+  &:hover {
+    color: #ffffff;
+  }
+}
+
+// The church logo sits on its own light tile so its original colours read on navy.
+.gel-brand-mark {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0.25rem;
+  border-radius: 10px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.gel-brand-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.gel-brand-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.2;
+  text-align: start;
+}
+
+.gel-brand-name {
+  font-size: 0.9375rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  white-space: normal;
+}
+
+.gel-brand-slogan {
+  margin-top: 0.125rem;
+  font-size: 0.6875rem;
+  font-weight: 450;
+  color: rgba(var(--gel-gold-rgb), 0.95);
+  white-space: normal;
+}
+
+@media (min-width: 1200px) {
+  .gel-sidebar.navbar-vertical {
+    .container-fluid {
+      padding-inline: 0.75rem;
+    }
+
+    .navbar-brand {
+      margin-inline: 0;
+      padding-inline: 0.5rem;
+      padding-block: 1.25rem 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .navbar-nav {
+      margin-inline: 0;
+    }
+  }
+
+  html.sidebar-collapsed {
+    --tblr-sidebar-width: 4.75rem;
+
+    .gel-sidebar.navbar-vertical {
+
+      .gel-brand {
+        justify-content: center;
+        padding-inline: 0;
+      }
+
+      .gel-brand-text,
+      .nav-link-title,
+      .nav-link-arrow,
+      .nav-row > .badge,
+      .navbar-nav .collapse {
+        display: none !important; // the icon rail hides labels, counters and open folders
+      }
+
+      .nav-row {
+        justify-content: center;
+      }
+
+      .nav-link {
+        justify-content: center;
+        padding-inline: 0;
+      }
+
+      .nav-link-icon {
+        margin: 0;
+      }
+    }
+  }
+
+  .gel-sidebar.navbar-vertical,
+  .gel-sidebar.navbar-vertical ~ .page-wrapper {
+    transition: width var(--gel-transition), margin-inline-start var(--gel-transition);
+  }
+}
+
+// Below xl the sidebar becomes a navy bar whose menu drops down.
+@media (max-width: 1199.98px) {
+  .gel-sidebar.navbar-vertical {
+    .gel-brand-mark {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
+
+    .gel-brand-slogan {
+      display: none;
+    }
+
+    .navbar-collapse .navbar-nav {
+      padding-block: 0.5rem 1rem;
+    }
+
+    .nav-item.active > .nav-row::before {
+      inset-inline-start: 0;
+    }
+  }
+}
+
+// ---- Top bar ---------------------------------------------------------------
+.gel-topbar.navbar {
+  min-height: 4rem;
+  background-color: var(--tblr-bg-surface);
+  border-bottom: 1px solid var(--gel-border);
+  box-shadow: none;
+
+  .nav-link {
+    color: var(--gel-text-muted);
+    transition: color var(--gel-transition);
+
+    &:hover {
+      color: var(--tblr-body-color);
+    }
+  }
+
+  .global-search .form-control {
+    min-height: 2.5rem;
+    background: var(--tblr-bg-surface-secondary);
+    border-color: transparent;
+
+    &:focus {
+      background: var(--tblr-bg-surface);
+      border-color: rgba(var(--tblr-primary-rgb), 0.5);
+    }
+  }
+}
+
+.gel-sidebar-toggle {
+  color: var(--gel-text-muted);
+
+  &:hover {
+    color: var(--tblr-body-color);
+  }
+}
+
+// ---- Page header -----------------------------------------------------------
+.page-wrapper > .page-header {
+  margin-block: 1.5rem 0.5rem;
+}
+
+.page-body {
+  margin-top: 1rem;
+}
+
+// ---- Footer ----------------------------------------------------------------
+.gel-footer {
+  font-size: 0.8125rem;
+  color: var(--gel-text-muted);
+  border-top: 1px solid var(--gel-border);
+
+  a {
+    color: var(--gel-text-muted);
+    font-weight: 550;
+
+    &:hover {
+      color: var(--tblr-body-color);
+    }
+  }
+}
+
+// ---- Floating action buttons pick up the brand ------------------------------
+.fab-button .fab-icon {
+  box-shadow: var(--gel-shadow-raised);
+}
+
+// ---- Reusable dashboard components ------------------------------------------
+.gel-stat {
+  .card-body {
+    padding: 1.125rem 1.25rem;
+  }
+}
+
+.gel-stat-label {
+  font-size: 0.8125rem;
+  font-weight: 550;
+  color: var(--gel-text-muted);
+}
+
+.gel-stat-value {
+  margin-top: 0.25rem;
+  font-size: 1.75rem;
+  font-weight: 650;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--tblr-body-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.gel-stat-meta {
+  margin-top: 0.375rem;
+  font-size: 0.75rem;
+  color: var(--gel-text-muted);
+}
+
+.gel-stat-disabled {
+  opacity: 0.6;
+}
+
+.gel-stat-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.gel-tone-navy {
+  color: var(--tblr-primary-text-emphasis, var(--gel-navy));
+  background: rgba(var(--tblr-primary-rgb), 0.1);
+}
+
+.gel-tone-gold {
+  color: var(--gel-gold-text);
+  background: rgba(var(--gel-gold-rgb), 0.16);
+}
+
+.gel-tone-success {
+  color: var(--gel-success);
+  background: rgba(var(--tblr-success-rgb), 0.12);
+}
+
+.gel-tone-info {
+  color: var(--gel-info);
+  background: rgba(var(--tblr-info-rgb), 0.12);
+}
+
+:root[data-bs-theme="dark"] {
+  .gel-tone-navy {
+    color: #b7c8ea;
+  }
+
+  .gel-tone-info {
+    color: #93b4f5;
+  }
+
+  .gel-tone-success {
+    color: #4fd1b5;
+  }
+}
+
+.gel-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 550;
+
+  &.gel-trend-up {
+    color: var(--gel-success);
+  }
+
+  &.gel-trend-down {
+    color: var(--gel-warning);
+  }
+}
+
+.gel-chart {
+  min-height: 240px;
+}
+
+.gel-quick-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.gel-quick-action {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 3rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--gel-border);
+  border-radius: var(--gel-radius-control);
+  font-size: 0.8125rem;
+  font-weight: 550;
+  color: var(--tblr-body-color);
+  text-decoration: none;
+  transition: border-color var(--gel-transition), background-color var(--gel-transition);
+
+  &:hover {
+    border-color: rgba(var(--gel-gold-rgb), 0.6);
+    background: rgba(var(--gel-gold-rgb), 0.06);
+    color: var(--tblr-body-color);
+  }
+}
+
+.gel-quick-action-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  color: var(--gel-gold-text);
+  background: rgba(var(--gel-gold-rgb), 0.14);
+}
+
+.gel-date-chip {
+  display: inline-flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 10px;
+  background: rgba(var(--tblr-primary-rgb), 0.08);
+  line-height: 1;
+}
+
+.gel-date-chip-month {
+  font-size: 0.625rem;
+  font-weight: 650;
+  text-transform: uppercase;
+  color: var(--gel-gold-text);
+}
+
+.gel-date-chip-day {
+  margin-top: 0.125rem;
+  font-size: 1.0625rem;
+  font-weight: 650;
+  color: var(--tblr-body-color);
+}
+
+.min-w-0 {
+  min-width: 0;
+}
+
+// Sidebar counters read on navy
+.gel-sidebar .badge.bg-dark,
+.gel-sidebar .badge.bg-secondary,
+.gel-sidebar .badge.bg-primary {
+  background: rgba(255, 255, 255, 0.14) !important; // beats Bootstrap's !important bg utility
+  color: #ffffff;
+}

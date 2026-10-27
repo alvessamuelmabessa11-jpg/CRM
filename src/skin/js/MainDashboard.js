@@ -87,11 +87,11 @@ export function initializeMainDashboard() {
     }
 
     // Deterministic color based on name
-    const colors = ["#667eea", "#764ba2", "#f093fb", "#4facfe", "#00f2fe", "#43e97b", "#fa709a", "#fee140"];
+    const colors = ["#14213D", "#1B2B4B", "#2F4A7A", "#0F766E", "#8A6417", "#475569"];
     const hash = name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const color = colors[hash % colors.length];
 
-    return `<span class="avatar avatar-sm rounded-circle" style="background-color: ${color};"><span class="avatar-title fs-6 fw-bold">${initials}</span></span>`;
+    return `<span class="avatar avatar-sm rounded-circle text-white" style="background-color: ${color};"><span class="avatar-title fs-6 fw-bold">${initials}</span></span>`;
   }
 
   // Helper to generate clickable photo img when row.HasPhoto === true
@@ -745,6 +745,8 @@ export function initializeMainDashboard() {
     $("#todayEventsDashboardItem").DataTable(todayEventsConfig);
   }
 
+  renderTrendCharts();
+
   if ($("#deposit-lineGraph").length > 0) {
     window.CRM.APIRequest({
       method: "GET",
@@ -811,9 +813,11 @@ export function initializeMainDashboard() {
           curve: "smooth",
           width: 2,
         },
+        colors: [brandColor("--tblr-primary", "#14213D")],
+        markers: { size: 3, colors: [brandColor("--gel-gold", "#D9A441")], strokeWidth: 0 },
         grid: {
           show: true,
-          borderColor: "#e0e0e0",
+          borderColor: brandColor("--tblr-border-color", "#E2E8F0"),
         },
       };
 
@@ -827,4 +831,58 @@ export function initializeMainDashboard() {
   }
 
   // CartManager handles all cart button clicks generically via data-cart-id and data-cart-type attributes
+}
+
+function brandColor(token, fallback) {
+  const value = getComputedStyle(document.documentElement).getPropertyValue(token).trim();
+  return value || fallback;
+}
+
+function monthLabel(yearMonth) {
+  const [year, month] = yearMonth.split("-").map(Number);
+  return new Date(year, month - 1, 1).toLocaleDateString(window.CRM.shortLocale || undefined, { month: "short" });
+}
+
+function renderTrendChart(elementId, series, name, type) {
+  const element = document.getElementById(elementId);
+  if (!element || !series) {
+    return;
+  }
+  if (series.values.every((value) => value === 0)) {
+    element.innerHTML =
+      '<div class="empty py-4"><p class="empty-title">' +
+      i18next.t("No data yet") +
+      '</p><p class="empty-subtitle text-body-secondary">' +
+      i18next.t("This chart fills in as records are added.") +
+      "</p></div>";
+    return;
+  }
+  const chart = new window.ApexCharts(element, {
+    chart: { type, height: 240, toolbar: { show: false }, fontFamily: "inherit", animations: { speed: 200 } },
+    series: [{ name, data: series.values }],
+    xaxis: {
+      categories: series.labels.map(monthLabel),
+      axisBorder: { show: false },
+      axisTicks: { show: false },
+    },
+    yaxis: {
+      min: 0,
+      tickAmount: Math.max(1, Math.min(4, Math.max(...series.values))),
+      labels: { formatter: (value) => Math.round(value) },
+    },
+    colors: [brandColor("--tblr-primary", "#14213D")],
+    fill: type === "area" ? { type: "gradient", gradient: { opacityFrom: 0.28, opacityTo: 0.02 } } : { opacity: 1 },
+    stroke: { curve: "monotoneCubic", width: type === "area" ? 2 : 0 },
+    plotOptions: { bar: { borderRadius: 4, columnWidth: "55%" } },
+    dataLabels: { enabled: false },
+    grid: { borderColor: brandColor("--tblr-border-color", "#E2E8F0"), strokeDashArray: 4 },
+    tooltip: { theme: document.documentElement.getAttribute("data-bs-theme") === "dark" ? "dark" : "light" },
+  });
+  chart.render();
+}
+
+function renderTrendCharts() {
+  const charts = window.CRM.dashboardCharts || {};
+  renderTrendChart("growthChart", charts.growth, i18next.t("New people"), "bar");
+  renderTrendChart("attendanceChart", charts.attendance, i18next.t("Attendance"), "bar");
 }

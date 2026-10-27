@@ -33,7 +33,7 @@ $contactWebsite = ChurchMetaData::getChurchWebSite();
         <?= ChurchLogo::img() ?>
       </div>
       <h2 class="login-header-church-name"><?= InputUtils::escapeHTML(ChurchMetaData::getChurchName()) ?></h2>
-      <p class="login-header-tagline"><?= gettext('Community Management Platform') ?></p>
+      <p class="login-header-tagline"><?= InputUtils::escapeHTML(ChurchMetaData::getChurchSlogan() ?: gettext('Community Management Platform')) ?></p>
     </div>
 
     <!-- Card body -->

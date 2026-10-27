@@ -175,7 +175,8 @@ $_currencySymbolCss = json_encode(CurrencyFormatter::symbol(), JSON_UNESCAPED_UN
   <!-- ============================================================ -->
   <!-- Sidebar (Tabler vertical navbar)                              -->
   <!-- ============================================================ -->
-  <aside class="navbar navbar-vertical navbar-expand-xl d-print-none" id="sidebar">
+  <aside class="navbar navbar-vertical navbar-expand-xl d-print-none gel-sidebar" id="sidebar" data-bs-theme="dark"
+         aria-label="<?= gettext('Main navigation') ?>">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button"
               data-bs-toggle="collapse" data-bs-target="#sidebar-menu"
@@ -183,23 +184,28 @@ $_currencySymbolCss = json_encode(CurrencyFormatter::symbol(), JSON_UNESCAPED_UN
               aria-label="<?= gettext('Toggle navigation') ?>">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a href="<?= SystemURLs::getRootPath() ?>/v2/dashboard" class="navbar-brand py-2">
-        <?php if (ChurchLogoService::hasCustomLogo()): ?>
-        <?= ChurchLogo::img(['class' => 'navbar-brand-image crm-brand-logo']) ?>
-        <?php else: ?>
-        <img src="<?= SystemURLs::getRootPath() ?>/Images/churchcrm-symbol-ink-blue.svg"
-             alt="<?= InputUtils::escapeAttribute(ChurchMetaData::getChurchName() ?: 'ChurchCRM') ?>"
-             class="navbar-brand-image crm-brand-logo crm-brand-logo-light">
-        <img src="<?= SystemURLs::getRootPath() ?>/Images/churchcrm-symbol-paper-blue.svg"
-             alt="<?= InputUtils::escapeAttribute(ChurchMetaData::getChurchName() ?: 'ChurchCRM') ?>"
-             class="navbar-brand-image crm-brand-logo crm-brand-logo-dark">
-        <span class="navbar-brand-text ps-2 fs-4 fw-bold">
-          <?= InputUtils::escapeHTML(ChurchMetaData::getChurchName() ?: 'ChurchCRM') ?>
+      <?php
+      $_brandName   = ChurchMetaData::getChurchName() ?: 'ChurchCRM';
+      $_brandSlogan = ChurchMetaData::getChurchSlogan();
+      ?>
+      <a href="<?= SystemURLs::getRootPath() ?>/v2/dashboard" class="navbar-brand gel-brand">
+        <span class="gel-brand-mark">
+          <?php if (ChurchLogoService::hasCustomLogo()): ?>
+          <?= ChurchLogo::img(['class' => 'gel-brand-logo']) ?>
+          <?php else: ?>
+          <img src="<?= SystemURLs::getRootPath() ?>/Images/churchcrm-symbol-ink-blue.svg"
+               alt="<?= InputUtils::escapeAttribute($_brandName) ?>" class="gel-brand-logo">
+          <?php endif; ?>
         </span>
-        <?php endif; ?>
+        <span class="gel-brand-text">
+          <span class="gel-brand-name"><?= InputUtils::escapeHTML($_brandName) ?></span>
+          <?php if ($_brandSlogan !== ''): ?>
+          <span class="gel-brand-slogan"><?= InputUtils::escapeHTML($_brandSlogan) ?></span>
+          <?php endif; ?>
+        </span>
       </a>
       <div class="collapse navbar-collapse" id="sidebar-menu">
-        <ul class="navbar-nav pt-xl-3">
+        <ul class="navbar-nav pt-xl-2">
           <?php MenuRenderer::renderMenu(); ?>
         </ul>
       </div>
@@ -214,8 +220,16 @@ $_currencySymbolCss = json_encode(CurrencyFormatter::symbol(), JSON_UNESCAPED_UN
   <!-- ============================================================ -->
   <!-- Topbar                                                        -->
   <!-- ============================================================ -->
-  <header class="navbar navbar-expand-md d-print-none sticky-top">
+  <header class="navbar navbar-expand-md d-print-none sticky-top gel-topbar">
     <div class="container-xl">
+
+      <button type="button" class="btn btn-icon btn-ghost-secondary d-none d-xl-inline-flex me-2 gel-sidebar-toggle"
+              id="sidebarCollapseToggle" aria-controls="sidebar" aria-pressed="false"
+              aria-label="<?= gettext('Collapse sidebar') ?>"
+              data-label-collapse="<?= InputUtils::escapeAttribute(gettext('Collapse sidebar')) ?>"
+              data-label-expand="<?= InputUtils::escapeAttribute(gettext('Expand sidebar')) ?>">
+        <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
+      </button>
 
       <button class="navbar-toggler" type="button"
               data-bs-toggle="collapse" data-bs-target="#navbar-menu"
@@ -331,7 +345,7 @@ $_currencySymbolCss = json_encode(CurrencyFormatter::symbol(), JSON_UNESCAPED_UN
           $userInitials = mb_strtoupper(mb_substr($nameParts[0], 0, 1) . mb_substr($nameParts[count($nameParts) - 1], 0, 1));
         }
 
-        $avatarColors = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#00f2fe', '#43e97b', '#fa709a', '#fee140'];
+        $avatarColors = ['#14213D', '#1B2B4B', '#2F4A7A', '#0F766E', '#8A6417', '#475569'];
         $colorIndex = crc32($currentUserName) % count($avatarColors);
         $avatarColor = $avatarColors[$colorIndex];
 

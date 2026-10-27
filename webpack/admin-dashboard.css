@@ -13,7 +13,7 @@
 
 .quick-start-card:hover {
   background: var(--tblr-bg-surface);
-  border-color: #0d6efd;
+  border-color: var(--tblr-primary);
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
   transform: translateY(-1px);
   text-decoration: none;

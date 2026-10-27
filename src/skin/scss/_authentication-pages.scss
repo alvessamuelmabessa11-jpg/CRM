@@ -15,7 +15,9 @@ body.page-login {
     content: '';
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.65);
+    background:
+      radial-gradient(circle at 85% 10%, rgba(217, 164, 65, 0.18), transparent 45%),
+      rgba(20, 33, 61, 0.9);
     z-index: 1;
   }
 }
@@ -31,9 +33,9 @@ body.page-login {
 
 .login-card {
   background: white;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
 }
 
 // Card header — logo, church name, tagline
@@ -41,7 +43,7 @@ body.page-login {
   text-align: center;
   padding: 32px 40px 28px;
   border-bottom: 2px solid #f0f0f0;
-  background: linear-gradient(to bottom, rgba(102, 126, 234, 0.03), transparent);
+  background: linear-gradient(to bottom, rgba(20, 33, 61, 0.03), transparent);
   border-radius: 12px 12px 0 0;
 }
 
@@ -83,14 +85,14 @@ body.page-login {
   }
 
   &.active {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gel-navy, #14213d);
     color: white;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.35);
+    box-shadow: 0 2px 8px rgba(20, 33, 61, 0.35);
   }
 
   &:hover:not(.active) {
-    background: rgba(102, 126, 234, 0.08);
-    color: #667eea;
+    background: rgba(20, 33, 61, 0.08);
+    color: var(--gel-navy, #14213d);
     text-decoration: none;
   }
 }
@@ -121,10 +123,10 @@ body.page-login {
     }
 
     &:hover {
-      color: #667eea;
+      color: var(--gel-navy, #14213d);
 
       i {
-        color: #667eea;
+        color: var(--gel-navy, #14213d);
       }
     }
   }
@@ -141,7 +143,7 @@ body.page-login {
 // Header with logo and church name on the recovery/2FA/error pages
 .login-form-header {
   text-align: center;
-  background: linear-gradient(to bottom, rgba(102, 126, 234, 0.03), transparent);
+  background: linear-gradient(to bottom, rgba(20, 33, 61, 0.03), transparent);
   border-bottom: 2px solid #f0f0f0;
   border-radius: 12px 12px 0 0;
   padding: 30px 40px;
@@ -175,7 +177,7 @@ body.page-login {
 
 .login-header-tagline {
   font-size: 13px;
-  color: #666;
+  color: var(--gel-gold-text, #8a6417);
   margin: 0;
   font-weight: 500;
   letter-spacing: 0.3px;
@@ -197,7 +199,7 @@ body.page-login {
 
     i {
       font-size: 24px;
-      color: #667eea;
+      color: var(--gel-navy, #14213d);
     }
   }
 
@@ -238,8 +240,8 @@ body.page-auth .mb-3 {
     &:focus {
       outline: none;
       background: white;
-      border-color: #667eea;
-      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.08);
+      border-color: var(--gel-navy, #14213d);
+      box-shadow: 0 0 0 4px rgba(20, 33, 61, 0.08);
     }
 
     &::placeholder {
@@ -265,12 +267,12 @@ body.page-auth .mb-3 {
   font-size: 12px;
 
   a {
-    color: #667eea;
+    color: var(--gel-navy, #14213d);
     text-decoration: none;
     transition: color 0.2s;
 
     &:hover {
-      color: #764ba2;
+      color: var(--gel-gold-text, #8a6417);
     }
   }
 }
@@ -279,7 +281,7 @@ body.page-auth .mb-3 {
 .btn-sign-in {
   width: 100%;
   padding: 14px 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gel-navy, #14213d);
   color: white;
   border: none;
   border-radius: 8px;
@@ -308,7 +310,7 @@ body.page-auth .mb-3 {
 
   &:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 24px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 12px 24px rgba(20, 33, 61, 0.4);
 
     &::before {
       left: 100%;
@@ -370,13 +372,13 @@ body.page-auth .alert {
   font-size: 14px;
 
   a {
-    color: #667eea;
+    color: var(--gel-navy, #14213d);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s;
 
     &:hover {
-      color: #764ba2;
+      color: var(--gel-gold-text, #8a6417);
     }
   }
 }
@@ -448,7 +450,7 @@ body.page-auth .alert {
 .btn-reset {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gel-navy, #14213d);
   color: white;
   border: none;
   border-radius: 6px;
@@ -460,7 +462,7 @@ body.page-auth .alert {
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 8px 20px rgba(20, 33, 61, 0.3);
   }
 
   &:disabled {
@@ -593,12 +595,12 @@ body.page-auth .btn {
   transition: all 0.2s;
 
   &.btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gel-navy, #14213d);
     color: white;
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 4px 12px rgba(20, 33, 61, 0.3);
     }
   }
 
@@ -638,7 +640,7 @@ body.page-auth .btn {
   }
 
   .login-header-tagline {
-    display: none;
+    font-size: 12px;
   }
 
   .login-card-body {

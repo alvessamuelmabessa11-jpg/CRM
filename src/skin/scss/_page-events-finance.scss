@@ -75,7 +75,7 @@ tbody.past-events-body {
 }
 
 .stat-card-total {
-  background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+  background: var(--tblr-primary);
 }
 
 .stat-card-total-amount {
@@ -124,7 +124,7 @@ tbody.past-events-body {
       &.selected,
       &.table-active {
         background-color: rgba(var(--tblr-primary-rgb), 0.08);
-        border-left: 3px solid #0d6efd;
+        border-left: 3px solid var(--tblr-primary);
       }
 
       td {
@@ -177,7 +177,7 @@ tbody.past-events-body {
     }
 
     &.stat-card-total {
-      background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+      background: var(--tblr-primary);
     }
   }
 

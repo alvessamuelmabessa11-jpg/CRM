@@ -64,6 +64,19 @@ $socialPlaceholders = [
                     </div>
 
                     <div class="mb-3">
+                        <label for="sChurchSlogan"><?= gettext('Slogan') ?></label>
+                        <input type="text"
+                               class="form-control"
+                               id="sChurchSlogan"
+                               name="sChurchSlogan"
+                               value="<?= InputUtils::escapeHTML($churchInfo['sChurchSlogan']) ?>"
+                               maxlength="120">
+                        <small class="form-text text-body-secondary">
+                            <?= gettext('Optional. Shown under the church name on the sign-in page and in the sidebar.') ?>
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="sChurchWebSite"><?= gettext('Website') ?></label>
                         <input type="url"
                                class="form-control"

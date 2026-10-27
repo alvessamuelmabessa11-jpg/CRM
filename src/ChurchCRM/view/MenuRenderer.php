@@ -33,7 +33,8 @@ class MenuRenderer
             <div class="d-flex align-items-center nav-row">
                 <a href="<?= InputUtils::escapeAttribute($menuItem->getURI()) ?>"
                    <?= $menuItem->isExternal() ?"target='_blank'" : '' ?>
-                   class="nav-link<?= $isActive ? ' active' : '' ?> flex-fill">
+                   class="nav-link<?= $isActive ? ' active' : '' ?> flex-fill"
+                   data-sidebar-label="<?= InputUtils::escapeAttribute($menuItem->getName()) ?>"<?= $isActive ? ' aria-current="page"' : '' ?>>
                     <span class="nav-link-icon d-inline-block">
                         <i class="fa <?= $menuItem->getIcon() ?>"></i>
                     </span>
@@ -58,7 +59,8 @@ class MenuRenderer
                    data-bs-toggle="collapse"
                    role="button"
                    aria-expanded="<?= $isOpen ? 'true' : 'false' ?>"
-                   aria-controls="<?= $collapseId ?>">
+                   aria-controls="<?= $collapseId ?>"
+                   data-sidebar-label="<?= InputUtils::escapeAttribute($menuItem->getName()) ?>">
                     <span class="nav-link-icon d-inline-block">
                         <i class="fa <?= $menuItem->getIcon() ?>"></i>
                     </span>
