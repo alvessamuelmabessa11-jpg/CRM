@@ -103,6 +103,22 @@ describe("API Finance Payments - giving recorded per person", () => {
         });
     });
 
+    it("makes a deleted person's gifts anonymous when they had no family", () => {
+        cy.setupAdminSession();
+        cy.createPersonWithBirthday({ name: `Donor${Cypress._.random(0, 1e6)}`, month: 0, day: 0 }).then((personId) => {
+            create({ PersonID: personId }).then((groupKey) => {
+                cy.makePrivateAdminAPICall("DELETE", `/api/person/${personId}`, null, 200);
+                getGroup(groupKey).then((group) => {
+                    expect(group.personId).to.equal(null);
+                    expect(group.familyId).to.equal(0);
+                });
+                cy.makePrivateAdminAPICall("GET", `/api/payments/person/${personId}/list?fyid=0`, null, 200)
+                    .its("body.data")
+                    .should("be.empty");
+            });
+        });
+    });
+
     it("refuses the person list without the Finance role", () => {
         cy.makePrivateNoFinanceAPICall("GET", `/api/payments/person/${MEMBER_OF_FAMILY_1}/list`, null, 403);
     });
